@@ -1,0 +1,139 @@
+# Sprite Flight Remix – Dev Notes
+
+## Scripts and what they do
+
+### Player script
+- Role: Controls the player ship (movement, input, collisions).
+- Responsibilities:
+  - Read input (mouse/keyboard/touch) and move the ship.
+  - Clamp position so the ship stays on screen.
+  - Detect collisions with obstacles and notify GameManager.
+- Key methods:
+  - `Update()` – reads input each frame and moves the ship using `Time.deltaTime`.
+  - `OnCollisionEnter2D()` or `OnTriggerEnter2D()` – detects hits with obstacles.
+
+### Obstacle script
+- Role: Controls obstacle movement and behavior.
+- Responsibilities:
+  - Move obstacles across the screen (e.g., from right to left).
+  - Optionally destroy obstacles when off‑screen.
+  - Optionally randomize speed / position.
+- Key methods:
+  - `Update()` – moves obstacle using velocity * `Time.deltaTime`.
+  - Maybe uses `Rigidbody2D` or spawner logic.
+
+### Obstacle Spawner script (if used)
+- Role: Spawns new obstacles over time.
+- Responsibilities:
+  - Use a timer to spawn prefabs at regular or random intervals.
+  - Randomize spawn height/position for variety.
+- Key methods:
+  - `Update()` – count down a timer.
+  - When timer <= 0, `Instantiate()` a new obstacle and reset timer.
+
+### Score script
+- Role: Manages the player’s score and updates the UI.
+- Responsibilities:
+  - Track score as time passes or distance increases.
+  - Update a UI Text/TextMeshPro element.
+- Key methods:
+  - `Update()` – increase score using `Time.deltaTime`.
+  - Public method like `AddScore(int amount)` if used.
+
+### GameManager script
+- Role: Controls overall game state.
+- Responsibilities:
+  - Knows if the game is “Playing”, “GameOver”, etc.
+  - Shows/hides UI panels (game over, restart button).
+  - Restarts the scene when the player dies.
+- Key methods:
+  - `StartGame()` – sets initial state.
+  - `GameOver()` – stops the game, shows UI.
+  - `RestartGame()` – reloads the scene.
+
+---
+
+## New C# / Unity concepts I met
+
+Write 1–2 lines in your own words for each one when you see it in the course.
+
+### `Time.deltaTime`
+- Meaning: Time (in seconds) that passed since the last frame.[web:125][web:121]  
+- Why it’s used: When multiplying movement by `Time.deltaTime`, the game becomes **frame‑rate independent** (same speed on fast and slow machines).[web:121][web:125]  
+- Example in this project:
+  - Used in movement: `transform.position += direction * speed * Time.deltaTime;`
+
+### `Update()`
+- Called once per frame.
+- Used for: reading input, moving objects, timers.
+
+### `FixedUpdate()`
+- Called at a fixed time step.
+- Used for: physics logic when using `Rigidbody2D`.
+
+### `OnCollisionEnter2D(Collision2D collision)`
+- Called when this object’s collider hits another collider **with Rigidbody2D**.[web:123]  
+- Used for: detecting when the player hits an obstacle.
+
+### `OnTriggerEnter2D(Collider2D other)`
+- Called when entering a trigger collider.
+- Used for: scoring zones, power‑ups, or non‑physical interactions.
+
+### `Rigidbody2D`
+- Component that makes an object use Unity’s 2D physics.
+- Used for: adding gravity, velocity, and bounces.
+
+### `Collider2D` (BoxCollider2D, CircleCollider2D, etc.)
+- Defines the shape used for 2D collisions.
+- Player + obstacles need colliders to register hits.
+
+### Physics Material 2D
+- tells Unity how a GameObject should react when it hits something, like whether it should slide, stick, or rebound.
+
+### `SerializeField`
+- Lets a private field show up in the Inspector.
+- Good for: exposing tunable values (speed, spawn rate) without making them public.
+
+### `public` vs `private`
+- `public`: accessible from other scripts and visible in Inspector (if a field).
+- `private`: only inside this script.
+
+### `Instantiate()`
+- Creates a new instance of a prefab at runtime.
+- Used in: obstacle spawners.
+
+### `SceneManager.LoadScene()`
+- Reloads or switches to another scene.
+- Used in: restart or menu logic.
+
+### randomDirection insideUnitCircle
+- gives you a random 2D point inside a circle of radius 1 centered at (0,0).
+- Short difference:
+Random spin → directly sets spin speed (no “force” simulation, just sets angularVelocity).
+Random torque → applies rotational force using physics (AddTorque), so rotation results from that force and inertia
+
+---
+
+## Bugs and fixes (optional section)
+
+Write down issues and how you fixed them. Example:
+
+- **Bug:** Player kept moving too fast when FPS was high.  
+  **Cause:** Movement code did not use `Time.deltaTime`.  
+  **Fix:** Multiply by `Time.deltaTime` so speed is frame‑rate independent.
+
+---
+
+## New concepts
+
+- Note: A skybox is a 3D environment wrapper used in 3D games. Since we're making a 2D game, a solid background color is simpler and more appropriate.
+- Polygon colliders automatically match the shape of the sprite — perfect for the hexagon.
+
+
+## Tips
+
+- Move tool (W)
+- Rect tool (T)
+- Rotate tool (E)
+- Scale tool (R)
+- ctrl + p for play mode
