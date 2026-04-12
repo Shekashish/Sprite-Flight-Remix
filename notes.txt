@@ -112,6 +112,8 @@ Write 1–2 lines in your own words for each one when you see it in the course.
 Random spin → directly sets spin speed (no “force” simulation, just sets angularVelocity).
 Random torque → applies rotational force using physics (AddTorque), so rotation results from that force and inertia
 
+
+### normalized - is a vector property that resizes the vector to a length of 1 (but keeps its direction)
 ---
 
 ## Bugs and fixes (optional section)
