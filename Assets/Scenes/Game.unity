@@ -1354,11 +1354,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8491e538d1a8ea140bd22a5ffea79373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PLayerController
-  thrustForce: 4
-  maxSpeed: 5
-  boosterFlame: {fileID: 2147044029}
   scoreMultiplier: 10
+  thrustForce: 4
+  boosterFlame: {fileID: 2147044029}
   uiDocument: {fileID: 1813408294}
+  explosionEffect: {fileID: 9080646210439295571, guid: 8e489778de5d2fe4eb7d59512fe296be, type: 3}
 --- !u!1 &1813408293
 GameObject:
   m_ObjectHideFlags: 0
